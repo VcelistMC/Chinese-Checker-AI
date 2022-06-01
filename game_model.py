@@ -104,12 +104,12 @@ class Game:
 
     def is_win(self, player):
         player1Count = 0
-        if player == "R":
+        if player == self.players[1]:
             start_index = 12
             end_index = 12
             for row in range(4):
                 for col in range(start_index, end_index+1, 2):
-                    if self.board[row][col] == "R":
+                    if self.board[row][col] == self.players[1]:
                         player1Count += 1
                 start_index -= 1
                 end_index += 1
@@ -119,7 +119,7 @@ class Game:
             end_index = 12
             for row in range(13, 17):
                 for col in range(start_index, end_index + 1, 2):
-                    if self.board[row][col] == "G":
+                    if self.board[row][col] == self.players[0]:
                         player1Count += 1
 
                 start_index -= 1
@@ -133,6 +133,8 @@ game = Game()
 
 # # print(moves)
 game.printBoard()
+print(game.is_win("R"))
+game.board
 # # print(game.getAllValidMoves(2, 12))
 # # game.printBoard()
 # print(game.is_win("R"))
