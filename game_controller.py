@@ -7,7 +7,23 @@ class GameManager:
         self.view = view
         self.AI = "R"
         self.Human = "B"
+        self.currentPlayer = self.Human
+        self.currentlyHeldCell = None
         self.difficulty = diff
+        self.holdingCell = False
+
+    def move(self, cell):
+        # we have to do extra shit here to validate the move and assert that the player
+        # is holding the valid balls and stuff and switch turns
+        # tommorrow tommorow 
+        
+        if not self.holdingCell:
+            self.currentlyHeldCell = cell
+            self.holdingCell = True
+        else:
+            self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], cell[0], cell[1])
+            self.view.update()
+            self.holdingCell = False
 
     def max_score(self, state1, state2):
         return state1 if state1[1] > state2[2] else state2
@@ -48,3 +64,5 @@ class GameManager:
 
     def evalBoard(self, board):
         pass
+
+

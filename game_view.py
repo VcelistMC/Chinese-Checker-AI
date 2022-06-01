@@ -11,18 +11,21 @@ from game_controller import GameManager
 button_style = "\n    color: #333;\n        border-radius: 30px;\n    border-style: outset;\n    background: {};\n    padding: 5px;\n    "
 
 class Cell(QPushButton):
+    size = 40
     def __init__(self, parent, ind, color):
         super(Cell, self).__init__(parent)
         self.ind = ind
-        self.setStyleSheet(button_style.format(color))
+        self.setColor(color)
         self.setFixedSize(40,40)
-        x = 40 if ind[1] == 0 else ind[1] * 32
-        y = 40 if ind[0] == 0 else ind[0] * 32
-        print(x,y)
+        x = ind[1] * 40
+        y = ind[0] * 40
         self.move(x, y)
 
     def resizeEvent(self, event):
         self.setMask(QRegion(self.rect(), QRegion.Ellipse))
+
+    def setColor(self, color):
+        self.setStyleSheet(button_style.format(color))
         
 
 class GameView(QMainWindow):
@@ -31,18 +34,49 @@ class GameView(QMainWindow):
         
         self.model = Game()
         self.controller = GameManager(self.model, self)
-
-        self.setMinimumSize(QSize(801, 801))
-        self.setMaximumSize(QSize(801, 801))
-        self.setStyleSheet("background:url(res/board.jpg)")
-
-        # circle = Cell(self, [1,11], "yellow")
-        # circle.clicked.connect(self.buttonClicked)
-
+        self.buttons = []
+        self.setMinimumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
+        self.setMaximumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
+        self.setStyleSheet("background: black")
+        
+        for row in range(self.model.rows):
+            for col in range(self.model.cols):
+                cell = self.model.getCell(row, col)
+                button = None
+                if cell != " ":
+                    if cell == "R":
+                        button = Cell(self, [row, col], "red")
+                    elif cell == "B":
+                        button = Cell(self, [row, col], "blue")
+                    else:
+                        button = Cell(self, [row, col], "white")
+                    self.buttons.append(button)
+                    button.clicked.connect(self.buttonClicked)
+    
     # send input to controller here
     def buttonClicked(self):
-        print(self.sender().ind)
+        ind = self.sender().ind
+        self.controller.move(ind)
     
     # re-render the board
-    def notify(board):
-        pass
+    def update(self):
+        currInd = 0
+        for row in range(self.model.rows):
+            for col in range(self.model.cols):
+                cell = self.model.getCell(row, col)
+                if cell != " ":
+                    if cell == "R":
+                        self.buttons[currInd].setColor("red")
+                    elif cell == "B":
+                        self.buttons[currInd].setColor("blue")
+                    else:
+                        self.buttons[currInd].setColor("white")
+                    currInd+=1
+
+
+
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    mainWin = GameView()
+    mainWin.show()
+    sys.exit( app.exec_() )

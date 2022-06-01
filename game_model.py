@@ -135,17 +135,18 @@ class Game:
                 if len(player_balls_position) == 10:
                     return player_balls_position
 
+    def getCell(self, row, col):
+        return self.board[row][col]
 
+# game = Game()
 
-game = Game()
-
-# # print(moves)
-game.printBoard()
-print(game.is_win("R"))
-game.board
-print(
-    game.getPlayerBalls("R")
-)
-# # print(game.getAllValidMoves(2, 12))
-# # game.printBoard()
+# # # print(moves)
+# game.printBoard()
 # print(game.is_win("R"))
+# game.board
+# print(
+#     game.getPlayerBalls("R")
+# )
+# # # print(game.getAllValidMoves(2, 12))
+# # # game.printBoard()
+# # print(game.is_win("R"))
