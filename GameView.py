@@ -7,8 +7,9 @@ from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QRegion
 
 button_style = "\n    color: #333;\n        border-radius: 30px;\n    border-style: outset;\n    background: {};\n    padding: 5px;\n    "
+
 class Cell(QPushButton):
-    def __init__(self, parent, ind,color):
+    def __init__(self, parent, ind, color):
         super(Cell, self).__init__(parent)
         self.ind = ind
         self.setStyleSheet(button_style.format(color))
