@@ -225,10 +225,10 @@ class Game:
 
 
 
-game = Game()
+# game = Game()
 
-# print(moves)
-game.printBoard()
-# print(game.getAllValidMoves(2, 12))
+# # print(moves)
 # game.printBoard()
-print(game.is_win("R"))
+# # print(game.getAllValidMoves(2, 12))
+# # game.printBoard()
+# print(game.is_win("R"))

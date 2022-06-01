@@ -1,10 +1,12 @@
 import sys
-from turtle import circle
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget
 from PyQt5.QtWidgets import QPushButton, QToolButton
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QRegion
+from game_model import Game
+
+from game_controller import GameManager
 
 button_style = "\n    color: #333;\n        border-radius: 30px;\n    border-style: outset;\n    background: {};\n    padding: 5px;\n    "
 
@@ -23,22 +25,24 @@ class Cell(QPushButton):
         self.setMask(QRegion(self.rect(), QRegion.Ellipse))
         
 
-class MainWindow(QMainWindow):
+class GameView(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
+        
+        self.model = Game()
+        self.controller = GameManager(self.model, self)
 
         self.setMinimumSize(QSize(801, 801))
-        self.setStyleSheet("background:url(board.jpg)")    
-        self.setWindowTitle("PyQt button example - pythonprogramminglanguage.com") 
+        self.setMaximumSize(QSize(801, 801))
+        self.setStyleSheet("background:url(res/board.jpg)")
 
         circle = Cell(self, [1,11], "yellow")
-        circle.clicked.connect(self.clickMethod)
+        circle.clicked.connect(self.buttonClicked)
 
-    def clickMethod(self):
+    # send input to controller here
+    def buttonClicked(self):
         print(self.sender().ind)
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    mainWin = MainWindow()
-    mainWin.show()
-    sys.exit( app.exec_() )
+    
+    # re-render the board
+    def notify(board):
+        pass
