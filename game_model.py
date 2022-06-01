@@ -1,43 +1,43 @@
 class Game:
     def initBoard(self):
         self.board = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
-        
-        #init top start
+
+        # init top start
         start_ind = 12
         end_ind = 12
 
         for row in range(0, 4):
-            for col in range(start_ind, end_ind+1, 2):
+            for col in range(start_ind, end_ind + 1, 2):
                 self.board[row][col] = self.players[0]
             start_ind -= 1
             end_ind += 1
 
-        #init first section with dots
+        # init first section with dots
         start_ind = 0
         end_ind = 24
 
         for row in range(4, 9):
-            for col in range(start_ind, end_ind+1, 2):
+            for col in range(start_ind, end_ind + 1, 2):
                 self.board[row][col] = "."
 
             start_ind += 1
             end_ind -= 1
-        
-        #init second empty section with dots
+
+        # init second empty section with dots
         start_ind = 3
         end_ind = 21
 
         for row in range(9, 13):
-            for col in range(start_ind, end_ind+1, 2):
+            for col in range(start_ind, end_ind + 1, 2):
                 self.board[row][col] = "."
             start_ind -= 1
             end_ind += 1
-        
-        #init bottom star
+
+        # init bottom star
         start_ind = 9
         end_ind = 15
         for row in range(13, 17):
-            for col in range(start_ind, end_ind+1, 2):
+            for col in range(start_ind, end_ind + 1, 2):
                 self.board[row][col] = self.players[1]
             start_ind += 1
             end_ind -= 1
@@ -101,14 +101,13 @@ class Game:
 
         return validMoves
 
-
     def is_win(self, player):
         player1Count = 0
         if player == self.players[1]:
             start_index = 12
             end_index = 12
             for row in range(4):
-                for col in range(start_index, end_index+1, 2):
+                for col in range(start_index, end_index + 1, 2):
                     if self.board[row][col] == self.players[1]:
                         player1Count += 1
                 start_index -= 1
@@ -127,6 +126,15 @@ class Game:
 
         return player1Count == 10
 
+    def getPlayerBalls(self, player):
+        player_balls_position = []
+        for row in range(self.rows):
+            for col in range(self.cols):
+                if self.board[row][col] == player:
+                    player_balls_position.append([row, col])
+                if len(player_balls_position) == 10:
+                    return player_balls_position
+
 
 
 game = Game()
@@ -135,6 +143,9 @@ game = Game()
 game.printBoard()
 print(game.is_win("R"))
 game.board
+print(
+    game.getPlayerBalls("R")
+)
 # # print(game.getAllValidMoves(2, 12))
 # # game.printBoard()
 # print(game.is_win("R"))

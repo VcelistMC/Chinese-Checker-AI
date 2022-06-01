@@ -2,36 +2,49 @@ from game_model import Game
 
 
 class GameManager:
-    def __init__(self, model, view, diff = 1) -> None:
-            self.model = model
-            self.view = view
-            self.player1Color = "R"
-            self.player2Color = "B"
-            self.difficulty = diff
+    def __init__(self, model: Game, view, diff=1) -> None:
+        self.model = model
+        self.view = view
+        self.AI = "R"
+        self.Human = "B"
+        self.difficulty = diff
 
-    def minimax(self, board, move, maxPlayer, depth):
-        if board.is_win() or depth == 0:
-            return [move, self.evalBoard(board)]
+    def max_score(self, state1, state2):
+        return state1 if state1[1] > state2[2] else state2
 
-        if maxPlayer:
-            validMoves = board.getAllValidMoves(move)
+    def min_score(self, state1, state2):
+        return state1 if state1[1] < state2[2] else state2
+
+    def minimax(self, model, move, player, depth):
+        if model.is_win(player) or depth == 0:
+            return [move, self.evalBoard(model)]
+
+        if player == self.Human:
+            score = [None, -9000]
+            validMoves = model.getAllValidMoves(move)
             for validMove in validMoves:
-                score = max(score, self.minimax(board, validMove, False, depth-1))
+                score = self.max_score(score, self.minimax(model, validMove, self.AI, depth - 1))
+            return score
 
         else:
-            validMoves = board.getAllValidMoves(move)
+            score = [None, 9000]
+            validMoves = model.getAllValidMoves(move)
             for validMove in validMoves:
-                score = min(score, self.minimax(board, validMove, True, depth-1)) 
-    
+                score = self.min_score(score, self.minimax(model, validMove, self.Human, depth - 1))
+            return score
+
     def getNextBestMove(self):
-        my_balls = []
-        scores = []
-        for my_ball in my_balls:
-            score = self.minimax(self.model, my_ball, True, self.difficulty)
-            scores.append(score)
-        
-        score = -1
-        nextBestMove = []
-        for nextMove in scores:
-            if score > nextMove[0]:
-                
+        AI_Balls = self.model.getPlayerBalls(self.AI)
+        states = []
+        for ball in AI_Balls:
+            state = self.minimax(self.model, ball, self.AI, self.difficulty)
+            states.append(state)
+
+        best_state = states[0]
+        for state in states:
+            best_state = self.max_score(best_state, state)
+
+        return best_state
+
+    def evalBoard(self, board):
+        pass
