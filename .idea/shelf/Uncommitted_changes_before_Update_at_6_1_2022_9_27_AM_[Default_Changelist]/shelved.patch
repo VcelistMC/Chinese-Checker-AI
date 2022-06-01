@@ -1,0 +1,166 @@
+Index: .idea/discord.xml
+===================================================================
+diff --git a/.idea/discord.xml b/.idea/discord.xml
+deleted file mode 100644
+--- a/.idea/discord.xml	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ /dev/null	(revision 8abf331eade0114808e36674a4e8730261eac78d)
+@@ -1,7 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<project version="4">
+-  <component name="DiscordProjectSettings">
+-    <option name="show" value="ASK" />
+-    <option name="description" value="" />
+-  </component>
+-</project>
+\ No newline at end of file
+Index: .idea/.gitignore
+===================================================================
+diff --git a/.idea/.gitignore b/.idea/.gitignore
+deleted file mode 100644
+--- a/.idea/.gitignore	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ /dev/null	(revision 8abf331eade0114808e36674a4e8730261eac78d)
+@@ -1,8 +0,0 @@
+-# Default ignored files
+-/shelf/
+-/workspace.xml
+-# Datasource local storage ignored files
+-/dataSources/
+-/dataSources.local.xml
+-# Editor-based HTTP Client requests
+-/httpRequests/
+Index: .idea/Checkers.iml
+===================================================================
+diff --git a/.idea/Checkers.iml b/.idea/Checkers.iml
+deleted file mode 100644
+--- a/.idea/Checkers.iml	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ /dev/null	(revision 8abf331eade0114808e36674a4e8730261eac78d)
+@@ -1,8 +0,0 @@
+-<?xml version="1.0" encoding="UTF-8"?>
+-<module type="PYTHON_MODULE" version="4">
+-  <component name="NewModuleRootManager">
+-    <content url="file://$MODULE_DIR$" />
+-    <orderEntry type="inheritedJdk" />
+-    <orderEntry type="sourceFolder" forTests="false" />
+-  </component>
+-</module>
+\ No newline at end of file
+Index: .idea/inspectionProfiles/Project_Default.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><component name=\"InspectionProjectProfileManager\">\r\n  <profile version=\"1.0\">\r\n    <option name=\"myName\" value=\"Project Default\" />\r\n    <inspection_tool class=\"Eslint\" enabled=\"true\" level=\"WARNING\" enabled_by_default=\"true\" />\r\n    <inspection_tool class=\"HtmlUnknownAttribute\" enabled=\"true\" level=\"WARNING\" enabled_by_default=\"true\">\r\n      <option name=\"myValues\">\r\n        <value>\r\n          <list size=\"1\">\r\n            <item index=\"0\" class=\"java.lang.String\" itemvalue=\"earth.jpg\" />\r\n          </list>\r\n        </value>\r\n      </option>\r\n      <option name=\"myCustomValuesEnabled\" value=\"true\" />\r\n    </inspection_tool>\r\n    <inspection_tool class=\"HtmlUnknownTag\" enabled=\"true\" level=\"WARNING\" enabled_by_default=\"true\">\r\n      <option name=\"myValues\">\r\n        <value>\r\n          <list size=\"7\">\r\n            <item index=\"0\" class=\"java.lang.String\" itemvalue=\"nobr\" />\r\n            <item index=\"1\" class=\"java.lang.String\" itemvalue=\"noembed\" />\r\n            <item index=\"2\" class=\"java.lang.String\" itemvalue=\"comment\" />\r\n            <item index=\"3\" class=\"java.lang.String\" itemvalue=\"noscript\" />\r\n            <item index=\"4\" class=\"java.lang.String\" itemvalue=\"embed\" />\r\n            <item index=\"5\" class=\"java.lang.String\" itemvalue=\"script\" />\r\n            <item index=\"6\" class=\"java.lang.String\" itemvalue=\"p\" />\r\n          </list>\r\n        </value>\r\n      </option>\r\n      <option name=\"myCustomValuesEnabled\" value=\"true\" />\r\n    </inspection_tool>\r\n    <inspection_tool class=\"PyPep8NamingInspection\" enabled=\"true\" level=\"WEAK WARNING\" enabled_by_default=\"true\">\r\n      <option name=\"ignoredErrors\">\r\n        <list>\r\n          <option value=\"N803\" />\r\n          <option value=\"N806\" />\r\n          <option value=\"N801\" />\r\n          <option value=\"N802\" />\r\n        </list>\r\n      </option>\r\n    </inspection_tool>\r\n  </profile>\r\n</component>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/inspectionProfiles/Project_Default.xml b/.idea/inspectionProfiles/Project_Default.xml
+--- a/.idea/inspectionProfiles/Project_Default.xml	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ b/.idea/inspectionProfiles/Project_Default.xml	(date 1654050738633)
+@@ -1,40 +1,31 @@
+ <component name="InspectionProjectProfileManager">
+   <profile version="1.0">
+     <option name="myName" value="Project Default" />
+-    <inspection_tool class="Eslint" enabled="true" level="WARNING" enabled_by_default="true" />
+     <inspection_tool class="HtmlUnknownAttribute" enabled="true" level="WARNING" enabled_by_default="true">
+       <option name="myValues">
+         <value>
+           <list size="1">
+-            <item index="0" class="java.lang.String" itemvalue="earth.jpg" />
++            <item index="0" class="java.lang.String" itemvalue="src" />
+           </list>
+         </value>
+       </option>
+       <option name="myCustomValuesEnabled" value="true" />
+     </inspection_tool>
+-    <inspection_tool class="HtmlUnknownTag" enabled="true" level="WARNING" enabled_by_default="true">
+-      <option name="myValues">
+-        <value>
+-          <list size="7">
+-            <item index="0" class="java.lang.String" itemvalue="nobr" />
+-            <item index="1" class="java.lang.String" itemvalue="noembed" />
+-            <item index="2" class="java.lang.String" itemvalue="comment" />
+-            <item index="3" class="java.lang.String" itemvalue="noscript" />
+-            <item index="4" class="java.lang.String" itemvalue="embed" />
+-            <item index="5" class="java.lang.String" itemvalue="script" />
+-            <item index="6" class="java.lang.String" itemvalue="p" />
+-          </list>
+-        </value>
++    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
++      <option name="ignoredErrors">
++        <list>
++          <option value="N802" />
++          <option value="N812" />
++          <option value="N801" />
++        </list>
+       </option>
+-      <option name="myCustomValuesEnabled" value="true" />
+     </inspection_tool>
+-    <inspection_tool class="PyPep8NamingInspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+-      <option name="ignoredErrors">
++    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
++      <option name="ignoredIdentifiers">
+         <list>
+-          <option value="N803" />
+-          <option value="N806" />
+-          <option value="N801" />
+-          <option value="N802" />
++          <option value="list.index" />
++          <option value="list.__getitem__" />
++          <option value="str.subs" />
+         </list>
+       </option>
+     </inspection_tool>
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.7 (Checkers)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ b/.idea/misc.xml	(date 1654050738940)
+@@ -1,4 +1,4 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.7 (Checkers)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.9" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/modules.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"ProjectModuleManager\">\r\n    <modules>\r\n      <module fileurl=\"file://$PROJECT_DIR$/.idea/Checkers.iml\" filepath=\"$PROJECT_DIR$/.idea/Checkers.iml\" />\r\n    </modules>\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/modules.xml b/.idea/modules.xml
+--- a/.idea/modules.xml	(revision 8abf331eade0114808e36674a4e8730261eac78d)
++++ b/.idea/modules.xml	(date 1654050738882)
+@@ -2,7 +2,7 @@
+ <project version="4">
+   <component name="ProjectModuleManager">
+     <modules>
+-      <module fileurl="file://$PROJECT_DIR$/.idea/Checkers.iml" filepath="$PROJECT_DIR$/.idea/Checkers.iml" />
++      <module fileurl="file://$PROJECT_DIR$/.idea/Chinese Checkers.iml" filepath="$PROJECT_DIR$/.idea/Chinese Checkers.iml" />
+     </modules>
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/Chinese Checkers.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/Chinese Checkers.iml b/.idea/Chinese Checkers.iml
+new file mode 100644
+--- /dev/null	(date 1654050738836)
++++ b/.idea/Chinese Checkers.iml	(date 1654050738836)
+@@ -0,0 +1,8 @@
++<?xml version="1.0" encoding="UTF-8"?>
++<module type="PYTHON_MODULE" version="4">
++  <component name="NewModuleRootManager">
++    <content url="file://$MODULE_DIR$" />
++    <orderEntry type="inheritedJdk" />
++    <orderEntry type="sourceFolder" forTests="false" />
++  </component>
++</module>
+\ No newline at end of file
