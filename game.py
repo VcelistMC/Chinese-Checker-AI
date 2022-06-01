@@ -1,19 +1,6 @@
 class Game:
-	def __init__(self):
-		self.cols = 25
-		self.rows = 17
-		self.rowsLengths = [1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1]
-
+	def initBoard(self):
 		self.newBoard = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
-
-		self.dirs = {}
-		self.dirs.setdefault("north west", [-1, -1])
-		self.dirs.setdefault("north east", [-1, 1])
-		self.dirs.setdefault("east", [0, 2])
-		self.dirs.setdefault("west", [0, -2])
-		self.dirs.setdefault("south west", [1, -1])
-		self.dirs.setdefault("south east", [1, 1])
-
 		self.newBoard[0][12] = "G"
 		self.newBoard[1][11] = "G"
 		self.newBoard[1][13] = "G"
@@ -148,12 +135,31 @@ class Game:
 		self.newBoard[12][10] = "."	
 		self.newBoard[12][12] = "."	
 		self.newBoard[12][14] = "."	
-		self.newBoard[12][16] = "."	
+		self.newBoard[12][16] = "."
+	
+	def __init__(self):
+		self.cols = 25
+		self.rows = 17
+		self.rowsLengths = [1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1]
+
+
+		self.dirs = {}
+		self.dirs.setdefault("north west", [-1, -1])
+		self.dirs.setdefault("north east", [-1, 1])
+		self.dirs.setdefault("east", [0, 2])
+		self.dirs.setdefault("west", [0, -2])
+		self.dirs.setdefault("south west", [1, -1])
+		self.dirs.setdefault("south east", [1, 1])
+
+		self.initBoard()
+
+			
+
 
 	def printBoard(self):
 		for i in range(self.rows):
 			for j in range(self.cols):
-				print(self.newBoard[i][j], end="")
+				print(self.newBoard[i][j], end=" ")
 			print("\n")
 
 	# executes a move, Note: This function assumes that the given next move is valid
@@ -174,7 +180,8 @@ class Game:
 		return moves
 	
 
-	def getAllValidMoves(self, pieceRow, pieceCol, allMoves: dict) -> list:
+	def getAllValidMoves(self,  pieceRow, pieceCol) -> list:
+		allMoves = self.getMoves(pieceRow, pieceCol)
 		validMoves = []
 		for dir, move in allMoves.items():
 			row = move[0]
@@ -192,16 +199,6 @@ class Game:
 
 		return validMoves
 
-	def getSecondMoves(self, row, col):
-		moves = self.getMoves(row, col)
-		newMove = self.getAllValidMoves(row, col, moves)
-		for move in newMove:
-			nextRow = move[0]
-			nextCol = move[1]
-			if self.newBoard[nextRow][nextCol] == ".":
-				continue
-			else:
-				self.getSecondMoves(nextRow, nextCol)
 		
 		
 
@@ -209,10 +206,9 @@ class Game:
 
 game = Game()
 
-moves = game.getMoves(12, 8)
-print(moves)
-print(game.getAllValidMoves(12, 8, moves))
-
+# print(moves)
+print(game.getAllValidMoves(2, 12))
+# game.printBoard()
 
 
 
