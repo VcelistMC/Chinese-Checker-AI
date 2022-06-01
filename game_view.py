@@ -36,8 +36,8 @@ class GameView(QMainWindow):
         self.setMaximumSize(QSize(801, 801))
         self.setStyleSheet("background:url(res/board.jpg)")
 
-        circle = Cell(self, [1,11], "yellow")
-        circle.clicked.connect(self.buttonClicked)
+        # circle = Cell(self, [1,11], "yellow")
+        # circle.clicked.connect(self.buttonClicked)
 
     # send input to controller here
     def buttonClicked(self):
