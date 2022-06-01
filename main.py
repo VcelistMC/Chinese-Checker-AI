@@ -1,27 +1,10 @@
-class Game:
-    def __init__(self):
-        self.board = [
-                                            ["G"],
-                                          ["G","G"],
-                                        ["G","G","G"],
-                                      ["G","G","G", "G"],
-                 ["B", "B", "B", "B", ".", ".", ".", ".", ".", "Y", "Y", "Y", "Y"],
-                   ["B", "B", "B", ".", ".", ".", ".", ".", ".", "Y", "Y", "Y"],
-                      ["B", "B", ".", ".", ".", ".", ".", ".", ".", "Y", "Y"],
-                        ["B", ".", ".", ".", ".", ".", ".", ".", ".", "Y"],
-                           [".", ".", ".", ".", ".", ".", ".", ".", "."],
-                        ["P", ".", ".", ".", ".", ".", ".", ".", ".", "O"],
-                      ["P", "P", ".", ".", ".", ".", ".", ".", ".", "O", "O"],
-                   ["P", "P", "P", ".", ".", ".", ".", ".", ".", "O", "O", "O"],
-                 ["P", "P", "P", "P", ".", ".", ".", ".", ".", "O", "O", "O", "O"],
-                                      ["R","R","R","R"],
-                                        ["R","R","R"],
-                                          ["R","R"],
-                                            ["R"]
-        ]
-        self.cols = 13
-        self.rows = 17
-    
+from game_view import GameView
+from PyQt5.QtWidgets import QMainWindow
+import sys
+from PyQt5 import QtCore, QtWidgets
 
-
-
+if __name__ == "__main__":
+    app = QtWidgets.QApplication(sys.argv)
+    mainWin = GameView()
+    mainWin.show()
+    sys.exit( app.exec_() )
