@@ -117,7 +117,7 @@ class Game:
 		self.board[4][16] = "."			
 
 		self.board[5][7] = "."	
-		self.board[5][9] = "O"	
+		self.board[5][9] = "."
 		self.board[5][11] = "."	
 		self.board[5][13] = "."	
 		self.board[5][15] = "."	
@@ -132,7 +132,7 @@ class Game:
 		self.board[6][18] = "."
 
 		self.board[7][5] = "."	
-		self.board[7][7] = "B"	
+		self.board[7][7] = "."
 		self.board[7][9] = "."	
 		self.board[7][11] = "."	
 		self.board[7][13] = "."	
@@ -315,15 +315,15 @@ class Game:
 				if len(player_balls_position) == 10:
 					return player_balls_position
 
-	def getCell(self, row, col):
+	def getBall(self, row, col):
 		return self.board[row][col]
 
 game = Game()
 
-# # # print(moves)
-# game.printBoard()
-# print(game.is_win("."))
-# game.board
-# print(game.g2(2, 12))
-# # # game.printBoard()
+# # # # print(moves)
+# # game.printBoard()
 # # print(game.is_win("."))
+# # game.board
+# print(game.g2(2, 12))
+# game.printBoard()
+# # # print(game.is_win("."))

@@ -41,7 +41,7 @@ class GameView(QMainWindow):
         
         for row in range(self.model.rows):
             for col in range(self.model.cols):
-                cell = self.model.getCell(row, col)
+                cell = self.model.getBall(row, col)
                 button = None
                 if cell != " ":
                     if cell == "R":
@@ -63,7 +63,7 @@ class GameView(QMainWindow):
         currInd = 0
         for row in range(self.model.rows):
             for col in range(self.model.cols):
-                cell = self.model.getCell(row, col)
+                cell = self.model.getBall(row, col)
                 if cell != " ":
                     if cell == "R":
                         self.buttons[currInd].setColor("red")
