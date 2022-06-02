@@ -1,3 +1,4 @@
+from audioop import minmax
 from game_model import Game
 
 
@@ -26,33 +27,41 @@ class GameManager:
             self.holdingCell = False
 
     def max_score(self, state1, state2):
-        return state1 if state1[1] > state2[2] else state2
+        return state1 if state1[1] > state2[1] else state2
 
     def min_score(self, state1, state2):
-        return state1 if state1[1] < state2[2] else state2
+        return state1 if state1[1] < state2[1] else state2
 
-    def minimax(self, model, move, player, depth):
+
+
+    def minimax(self, model, player, depth, move):
+        self.model.printBoard()
         if model.is_win(player) or depth == 0:
             return [move, self.evalBoard(player)]
 
-        if player == self.Human:
-            score = [None, -9000]
-            validMoves = model.getAllValidMoves(move)
-            for validMove in validMoves:
-                model.move(move[0], move[1], validMove[0], validMove[1])
-                score = self.max_score(score, self.minimax(model, validMove, self.AI, depth - 1))
-                model.move(validMove[0], validMove[1], move[0], move[1])
-            return score
+        playerBalls = self.model.getPlayerBalls(player)
 
-        else:
-            score = [None, 9000]
-            validMoves = model.getAllValidMoves(move)
-            for validMove in validMoves:
-                model.move(move[0], move[1], validMove[0], validMove[1])
-                score = self.min_score(score, self.minimax(model, validMove, self.Human, depth - 1))
-                model.move(validMove[0], validMove[1], move[0], move[1])
+        for playerBall in playerBalls:
+            validMoves_for_balls = self.model.getAllValidMoves(playerBall[0], playerBall[1])
 
-            return score
+            for validMove in validMoves_for_balls:
+                if player == self.Human:
+                    score = [None, -9000]
+
+                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
+                    score = self.max_score(score, self.minimax(model, self.AI, depth - 1, move))
+                    model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
+                    return score
+
+                else:
+                    score = [None, 9000]
+
+                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
+                    score = self.min_score(score, self.minimax(model, self.Human, depth - 1, validMove))
+                    model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
+
+                    return score
+
 
     def getNextBestMove(self):
         AI_Balls = self.model.getPlayerBalls(self.AI)
@@ -69,6 +78,7 @@ class GameManager:
 
     def evalBoard(self, player):
         balls = self.model.getPlayerBalls(player)
+        self.model.printBoard()
         goal = []
         distance = 0
         if player == self.Human:
@@ -83,7 +93,12 @@ class GameManager:
 
 
 game = Game()
-game.printBoard()
 gamemanage = GameManager(game, None, 1)
-game.move(3,13,4,12)
-print(gamemanage.evalBoard(player=gamemanage.AI))
+# game.printBoard()
+move = gamemanage.minimax(game, gamemanage.AI, 2, [3, 13])[0]
+# print(/move)
+# game.printBoard()
+# gamemanage.model.move(3, 13, move[0], move[1])
+# move = gamemanage.minimax(game, gamemanage.AI, 2, move)
+# game.printBoard()
+lis =[]

@@ -229,7 +229,7 @@ class Game:
 
 	# if we hop, we have to hop again to keep moving, otherwise we stop
 	
-	def g2(self, pieceRow, pieceCol, currValidMoves = set(), isHopping = False):
+	def getAllValidMoves(self, pieceRow, pieceCol, currValidMoves = set(), isHopping = False):
 		# get all possible moves (adjacent cells)
 		allMoves = self.getMoves(pieceRow, pieceCol)
 		for direction, move in allMoves.items():
@@ -258,28 +258,28 @@ class Game:
 				# add the move to our set
 				currValidMoves.add((jumpRow, jumpCol))
 				# recurse
-				currValidMoves = self.g2(jumpRow, jumpCol, currValidMoves, True)
+				currValidMoves = self.getAllValidMoves(jumpRow, jumpCol, currValidMoves, True)
 		return currValidMoves
 
 
-	def getAllValidMoves(self, pieceRow, pieceCol) -> list:
-		allMoves = self.getMoves(pieceRow, pieceCol)
-		validMoves = []
-		for dir, move in allMoves.items():
-			row = move[0]
-			col = move[1]
-			if self.board[row][col] == ".":
-				validMoves.append(move)
-				continue
+	# def getAllValidMoves(self, pieceRow, pieceCol) -> list:
+	# 	allMoves = self.getMoves(pieceRow, pieceCol)
+	# 	validMoves = []
+	# 	for dir, move in allMoves.items():
+	# 		row = move[0]
+	# 		col = move[1]
+	# 		if self.board[row][col] == ".":
+	# 			validMoves.append(move)
+	# 			continue
 
-			dirMove = self.directions[dir]
-			newRow = row + dirMove[0]
-			newCol = col + dirMove[1]
+	# 		dirMove = self.directions[dir]
+	# 		newRow = row + dirMove[0]
+	# 		newCol = col + dirMove[1]
 
-			if self.board[newRow][newCol] == ".":
-				validMoves.append([newRow, newCol])
+	# 		if self.board[newRow][newCol] == ".":
+	# 			validMoves.append([newRow, newCol])
 
-		return validMoves
+	# 	return validMoves
 
 	def is_win(self, player):
 		player1Count = 0
@@ -314,6 +314,7 @@ class Game:
 					player_balls_position.append([row, col])
 				if len(player_balls_position) == 10:
 					return player_balls_position
+
 
 	def getBall(self, row, col):
 		return self.board[row][col]
