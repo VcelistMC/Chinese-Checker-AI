@@ -209,7 +209,7 @@ class Game:
 		
 	def manhattan_distance(self, start, end):
 		row_diff = abs(end[0] - start[0])
-		col_diff = abs(end[1] - start[1])
+		col_diff = abs(end[1] - start[1]) // 2
 
 		return row_diff + col_diff
 
@@ -219,7 +219,7 @@ class Game:
 				if self.getBall(i, j) == " ":
 					print(" ", end = " ")
 				else:
-					print(self.eclidiean_distance([i, j], [16, 12]), end=" ")
+					print(self.manhattan_distance([i, j], [16, 12]), end=" ")
 			print("\n")
 		# system("pause")
 		# system("cls")
@@ -332,15 +332,15 @@ class Game:
 				end_index += 1
 
 		else:
-			start_index = 12
-			end_index = 12
+			start_index = 9
+			end_index = 15
 			for row in range(13, 17):
 				for col in range(start_index, end_index + 1, 2):
 					if self.board[row][col] == player:
 						count += 1
 
-				start_index -= 1
-				end_index += 1
+				start_index += 1
+				end_index -= 1
 
 		return count == 10
 

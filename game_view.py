@@ -33,7 +33,7 @@ class GameView(QMainWindow):
         QMainWindow.__init__(self)
         
         self.model = Game()
-        self.controller = GameManager(self.model, self)
+        self.controller = GameManager(self.model, self, 5)
         self.buttons = {}
         self.setMinimumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
         self.setMaximumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
@@ -48,7 +48,7 @@ class GameView(QMainWindow):
                         button = Cell(self, [row, col], "red")
                     elif cell == "B":
                         button = Cell(self, [row, col], "blue")
-                    else:
+                    elif cell == ".":
                         button = Cell(self, [row, col], "white")
                     self.buttons.setdefault((row, col), button)
                     button.clicked.connect(self.buttonClicked)
@@ -75,7 +75,7 @@ class GameView(QMainWindow):
     
     def setValidMoves(self, moves):
         for move in moves:
-            self.buttons[tuple(move)].setColor("cyan")
+            self.buttons[tuple(move)].setColor("orange")
 
 
 if __name__ == "__main__":

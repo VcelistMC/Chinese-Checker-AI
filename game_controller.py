@@ -34,8 +34,8 @@ class GameManager:
             self.view.setValidMoves(self.model.getAllValidMoves(cell[0], cell[1]))
             return 
         else:
-            if tuple(cell) not in self.model.getAllValidMoves(self.currentlyHeldCell[0], self.currentlyHeldCell[1]):
-                return
+            # if tuple(cell) not in self.model.getAllValidMoves(self.currentlyHeldCell[0], self.currentlyHeldCell[1]):
+            #     return
             self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], cell[0], cell[1])
             self.view.update()
             self.holdingCell = False
@@ -109,6 +109,7 @@ class GameManager:
         piece_to_move = None
         bestScore = self.MAX_SCORE
         aiPieces = self.model.getPlayerBalls(self.AI)
+
         for piece in aiPieces:
             validMoves = self.model.getAllValidMoves(piece[0], piece[1])
             for validMove in validMoves:
@@ -140,9 +141,9 @@ class GameManager:
     def evalBoard(self, player):
         # # print(balls)
         goal = [0,12] if player == self.Human else [16,12]
-        start = 12
-        end = 12
-        found = False
+        # start = 12
+        # end = 12
+        # found = False
         # if player == self.AI:
         #     for row in range(16, 12, -1):
         #         for col in range(start, end+1):
@@ -167,7 +168,7 @@ class GameManager:
         #         if found:
         #             break
 
-        print("goal for {} is {}".format(player, str(goal)))
+        # print("goal for {} is {}".format(player, str(goal)))
         distance = 0
 
         balls = self.model.getPlayerBalls(player)
