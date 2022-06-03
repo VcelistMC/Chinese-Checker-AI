@@ -18,7 +18,8 @@ class GameManager:
         # we have to do extra shit here to validate the move and assert that the player
         # is holding the valid balls and stuff and switch turns
         # tommorrow tommorow 
-
+        # if self.model.getBall(cell[0], cell[1]) == "." and not self.holdingCell: return
+        
         if not self.holdingCell:
             self.currentlyHeldCell = cell
             self.holdingCell = True
@@ -47,8 +48,10 @@ class GameManager:
         playerWon = self.model.is_win(player)
         if playerWon:
             if player == self.AI:
+                print("AI won")
                 return -self.MAX_SCORE
             else: 
+                print("Human won")
                 return self.MAX_SCORE
 
         elif depth == 0:
@@ -113,17 +116,52 @@ class GameManager:
 
     def eclidiean_distance(self, start, end):
         num1 = pow(end[0] - start[0], 2)
-        num2 = pow(end[1] - start[1], 2)
+        num2 = pow(end[1] - start[1], 2) // 2
         # print("num1: {0} num2: {1}".format(num1, num2))
-        return sqrt(num1 + num2)
+        return int(sqrt(num1 + num2))
+
+    def manhattan_distance(self, start, end):
+        row_diff = abs(end[0] - start[0])
+        col_diff = abs(end[1] - start[1])
+
+        return row_diff + col_diff
 
     def evalBoard(self, player):
-        balls = self.model.getPlayerBalls(player)
-        # print(balls)
+        # # print(balls)
         goal = [0,12] if player == self.Human else [16,12]
+        # start = 12
+        # end = 12
+        # found = False
+        # if player == self.AI:
+        #     for row in range(16, 12, -1):
+        #         for col in range(start, end+1):
+        #             if self.model.getBall(row, col) == ".":
+        #                 goal = [row, col]
+        #                 found = True
+        #                 break
+        #         start -= 1
+        #         end += 1
+        #         if found:
+        #             break
+            
+        # else:
+        #     for row in range(0, 4):
+        #         for col in range(start, end+1):
+        #             if self.model.getBall(row, col) == ".":
+        #                 goal = [row, col]
+        #                 found = True
+        #                 break
+        #         start -= 1
+        #         end += 1
+        #         if found:
+        #             break
+
+        print("goal for {} is {}".format(player, str(goal)))
         distance = 0
+
+        balls = self.model.getPlayerBalls(player)
         for ball in balls:
-            distance += self.eclidiean_distance(ball, goal)
+            distance +=  self.eclidiean_distance(ball, goal)
 
         return distance
 

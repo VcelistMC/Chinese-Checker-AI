@@ -1,8 +1,10 @@
+from math import ceil, floor, sqrt
 from os import system
 from time import sleep
 
 
 class Game:
+	
 	def initBoard(self):
 		self.board = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
 
@@ -187,10 +189,8 @@ class Game:
 
 	def __init__(self):
 		self.cols = 25
-		self.players = [".", "."]
 		self.rows = 17
 		self.rowsLengths = [1, 2, 3, 4, 13, 12, 11, 10, 9, 10, 11, 12, 13, 4, 3, 2, 1]
-
 		self.directions = {}
 		self.directions.setdefault("north west", [-1, -1])
 		self.directions.setdefault("north east", [-1, 1])
@@ -200,11 +200,26 @@ class Game:
 		self.directions.setdefault("south east", [1, 1])
 
 		self.manualInit()
+		
+	def eclidiean_distance(self, start, end):
+		num1 = pow(end[0] - start[0], 2)
+		num2 = pow(end[1] - start[1], 2) // 2
+		# print("num1: {0} num2: {1}".format(num1, num2))
+		return int(sqrt(num1 + num2)) 
+		
+	def manhattan_distance(self, start, end):
+		row_diff = abs(end[0] - start[0])
+		col_diff = abs(end[1] - start[1])
+
+		return row_diff + col_diff
 
 	def printBoard(self):
 		for i in range(self.rows):
 			for j in range(self.cols):
-				print(self.board[i][j], end=" ")
+				if self.getBall(i, j) == " ":
+					print(" ", end = " ")
+				else:
+					print(self.eclidiean_distance([i, j], [16, 12]), end=" ")
 			print("\n")
 		# system("pause")
 		# system("cls")
@@ -237,7 +252,20 @@ class Game:
 	
 	def getAllValidMoves(self, pieceRow, pieceCol):
 		moveSet = set()
-		return self.getValidMoveRecu(pieceRow, pieceCol, moveSet, False)
+		moveSet = self.getValidMoveRecu(pieceRow, pieceCol, moveSet, False)
+		copySet = set(moveSet)
+		ball = self.getBall(pieceRow, pieceCol)
+		if ball == "B":
+			if 0 <= pieceRow < 4:
+				for move in moveSet:
+					if move[0] > 3:
+						copySet.remove(move)
+		else:
+			if 13 <= pieceRow < 17:
+				for move in moveSet:
+					if move[0] < 13:
+						copySet.remove(move)
+		return copySet
 
 	def getValidMoveRecu(self, pieceRow, pieceCol, currValidMoves, isHopping):
 		# get all possible moves (adjacent cells)
@@ -292,14 +320,14 @@ class Game:
 	# 	return validMoves
 
 	def is_win(self, player):
-		player1Count = 0
-		if player == self.players[1]:
+		count = 0
+		if player == "B":
 			start_index = 12
 			end_index = 12
 			for row in range(4):
 				for col in range(start_index, end_index + 1, 2):
-					if self.board[row][col] == self.players[1]:
-						player1Count += 1
+					if self.board[row][col] == player:
+						count += 1
 				start_index -= 1
 				end_index += 1
 
@@ -308,13 +336,13 @@ class Game:
 			end_index = 12
 			for row in range(13, 17):
 				for col in range(start_index, end_index + 1, 2):
-					if self.board[row][col] == self.players[0]:
-						player1Count += 1
+					if self.board[row][col] == player:
+						count += 1
 
 				start_index -= 1
 				end_index += 1
 
-		return player1Count == 10
+		return count == 10
 
 	def getPlayerBalls(self, player):
 		player_balls_position = []
@@ -329,12 +357,12 @@ class Game:
 	def getBall(self, row, col):
 		return self.board[row][col]
 
-# game = Game()
+game = Game()
 
-# # # # print(moves)
-# # game.printBoard()
-# # print(game.is_win("."))
-# # game.board
-# print(game.g2(2, 12))
-# game.printBoard()
+# # # # # print(moves)
+# # # game.printBoard()
 # # # print(game.is_win("."))
+# # # game.board
+# # print(game.g2(2, 12))
+game.printBoard()
+# # # # print(game.is_win("."))
