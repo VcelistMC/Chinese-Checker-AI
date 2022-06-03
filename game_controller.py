@@ -1,4 +1,4 @@
-from audioop import minmax
+from math import sqrt
 from game_model import Game
 
 
@@ -9,6 +9,7 @@ class GameManager:
         self.AI = "R"
         self.Human = "B"
         self.currentPlayer = self.Human
+        self.MAX_SCORE = 9000
         self.currentlyHeldCell = None
         self.difficulty = diff
         self.holdingCell = False
@@ -21,10 +22,17 @@ class GameManager:
         if not self.holdingCell:
             self.currentlyHeldCell = cell
             self.holdingCell = True
+            return
         else:
             self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], cell[0], cell[1])
             self.view.update()
             self.holdingCell = False
+        
+        self.currentlyHeldCell, nextMove = self.getNextBestMove()
+        self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], nextMove[0], nextMove[1])
+        self.view.update()
+        print("moved " + str(self.currentlyHeldCell) + " to " + str(nextMove))
+
 
     def max_score(self, state1, state2):
         return state1 if state1[1] > state2[1] else state2
@@ -34,10 +42,17 @@ class GameManager:
 
 
 
-    def minimax(self, model, player, depth, move):
-        self.model.printBoard()
-        if model.is_win(player) or depth == 0:
-            return [move, self.evalBoard(player)]
+    def minimax(self, model, player, depth):
+        
+        playerWon = self.model.is_win(player)
+        if playerWon:
+            if player == self.AI:
+                return -self.MAX_SCORE
+            else: 
+                return self.MAX_SCORE
+
+        elif depth == 0:
+            return self.evalBoard(self.AI) - self.evalBoard(self.Human)
 
         playerBalls = self.model.getPlayerBalls(player)
 
@@ -46,59 +61,79 @@ class GameManager:
 
             for validMove in validMoves_for_balls:
                 if player == self.Human:
-                    score = [None, -9000]
-
+                    score = -self.MAX_SCORE
+                    
                     model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
-                    score = self.max_score(score, self.minimax(model, self.AI, depth - 1, move))
+                    # print("Human moved " + str(playerBall) +" to " + str(validMove) )
+                    # self.model.printBoard()
+                    
+                    score = max(score, self.minimax(model, self.AI, depth - 1))
                     model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
+                    
+                    # print("Human unmoved " + str(validMove) +" to " + str(playerBall))
+                    # self.model.printBoard()
+
                     return score
 
                 else:
-                    score = [None, 9000]
+                    score = self.MAX_SCORE
 
                     model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
-                    score = self.min_score(score, self.minimax(model, self.Human, depth - 1, validMove))
+                    # print("Ai moved " + str(playerBall) + " to " + str(validMove))
+                    # self.model.printBoard()
+
+                    score = min(score, self.minimax(model, self.Human, depth - 1))
                     model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
 
+                    # print("AI unmoved " + str(validMove) + " to " + str(playerBall))
+                    # self.model.printBoard()
                     return score
 
 
     def getNextBestMove(self):
-        AI_Balls = self.model.getPlayerBalls(self.AI)
-        states = []
-        for ball in AI_Balls:
-            state = self.minimax(self.model, ball, self.AI, self.difficulty)
-            states.append(state)
+        nextMove = None
+        piece_to_move = None
+        bestScore = self.MAX_SCORE
+        aiPieces = self.model.getPlayerBalls(self.AI)
+        for piece in aiPieces:
+            validMoves = self.model.getAllValidMoves(piece[0], piece[1])
+            for validMove in validMoves:
+                
+                self.model.move(piece[0], piece[1], validMove[0], validMove[1])
+                score = self.minimax(self.model, self.Human, self.difficulty)
+                self.model.move(validMove[0], validMove[1], piece[0], piece[1])
 
-        best_state = states[0]
-        for state in states:
-            best_state = self.max_score(best_state, state)
+                # print("moving " + str(piece) + " to " + str(validMove) + " will result in " + str(score))
+                if score < bestScore:
+                    nextMove = validMove
+                    bestScore = score
+                    piece_to_move = piece
+        
+        return piece_to_move, nextMove
 
-        return best_state
+    def eclidiean_distance(self, start, end):
+        num1 = pow(end[0] - start[0], 2)
+        num2 = pow(end[1] - start[1], 2)
+        # print("num1: {0} num2: {1}".format(num1, num2))
+        return sqrt(num1 + num2)
 
     def evalBoard(self, player):
         balls = self.model.getPlayerBalls(player)
-        self.model.printBoard()
-        goal = []
+        # print(balls)
+        goal = [0,12] if player == self.Human else [16,12]
         distance = 0
-        if player == self.Human:
-            goal = [0, 12]
-        else:
-            goal = [16, 12]
-
         for ball in balls:
-            distance += abs(ball[0] - goal[0]) + abs(ball[1] - goal[1])
+            distance += self.eclidiean_distance(ball, goal)
 
         return distance
 
 
-game = Game()
-gamemanage = GameManager(game, None, 1)
+# game = Game()
+# gamemanage = GameManager(game, None, 3)
+# # print(gamemanage.evalBoard(gamemanage.AI))
+# # game.move(2, 12, 6, 8)
 # game.printBoard()
-move = gamemanage.minimax(game, gamemanage.AI, 2, [3, 13])[0]
-# print(/move)
-# game.printBoard()
-# gamemanage.model.move(3, 13, move[0], move[1])
-# move = gamemanage.minimax(game, gamemanage.AI, 2, move)
-# game.printBoard()
-lis =[]
+# # print(gamemanage.evalBoard(gamemanage.Human))
+# # print(gamemanage.evalBoard(gamemanage.AI))
+# # print(game.getAllValidMoves(2, 12))
+# print(gamemanage.getNextBestMove())

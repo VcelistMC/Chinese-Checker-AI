@@ -1,7 +1,7 @@
 import sys
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow, QLabel, QGridLayout, QWidget
-from PyQt5.QtWidgets import QPushButton, QToolButton
+from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QRegion
 from game_model import Game

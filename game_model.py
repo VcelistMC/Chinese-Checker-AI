@@ -1,3 +1,7 @@
+from os import system
+from time import sleep
+
+
 class Game:
 	def initBoard(self):
 		self.board = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
@@ -202,6 +206,8 @@ class Game:
 			for j in range(self.cols):
 				print(self.board[i][j], end=" ")
 			print("\n")
+		# system("pause")
+		# system("cls")
 
 	# executes a move, Note: This function assumes that the given next move is valid
 	def move(self, pieceRow, pieceCol, destRow, destCol):
@@ -229,7 +235,11 @@ class Game:
 
 	# if we hop, we have to hop again to keep moving, otherwise we stop
 	
-	def getAllValidMoves(self, pieceRow, pieceCol, currValidMoves = set(), isHopping = False):
+	def getAllValidMoves(self, pieceRow, pieceCol):
+		moveSet = set()
+		return self.getValidMoveRecu(pieceRow, pieceCol, moveSet, False)
+
+	def getValidMoveRecu(self, pieceRow, pieceCol, currValidMoves, isHopping):
 		# get all possible moves (adjacent cells)
 		allMoves = self.getMoves(pieceRow, pieceCol)
 		for direction, move in allMoves.items():
@@ -258,7 +268,7 @@ class Game:
 				# add the move to our set
 				currValidMoves.add((jumpRow, jumpCol))
 				# recurse
-				currValidMoves = self.getAllValidMoves(jumpRow, jumpCol, currValidMoves, True)
+				currValidMoves = self.getValidMoveRecu(jumpRow, jumpCol, currValidMoves, True)
 		return currValidMoves
 
 
@@ -319,7 +329,7 @@ class Game:
 	def getBall(self, row, col):
 		return self.board[row][col]
 
-game = Game()
+# game = Game()
 
 # # # # print(moves)
 # # game.printBoard()
