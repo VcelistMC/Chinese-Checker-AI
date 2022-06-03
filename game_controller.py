@@ -18,12 +18,21 @@ class GameManager:
         # we have to do extra shit here to validate the move and assert that the player
         # is holding the valid balls and stuff and switch turns
         # tommorrow tommorow 
-        # if self.model.getBall(cell[0], cell[1]) == "." and not self.holdingCell: return
+        ball = self.model.getBall(cell[0], cell[1])
+        if (ball == "." and not self.holdingCell) or ball == self.AI: return
         
+        if ball == self.Human and self.holdingCell:
+            self.currentlyHeldCell = cell
+            self.view.update()
+            self.view.setValidMoves(self.model.getAllValidMoves(cell[0], cell[1]))
+            return
+
         if not self.holdingCell:
             self.currentlyHeldCell = cell
             self.holdingCell = True
-            return
+            self.view.update()
+            self.view.setValidMoves(self.model.getAllValidMoves(cell[0], cell[1]))
+            return 
         else:
             self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], cell[0], cell[1])
             self.view.update()

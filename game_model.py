@@ -199,7 +199,7 @@ class Game:
 		self.directions.setdefault("south west", [1, -1])
 		self.directions.setdefault("south east", [1, 1])
 
-		self.manualInit()
+		self.initBoard()
 		
 	def eclidiean_distance(self, start, end):
 		num1 = pow(end[0] - start[0], 2)
