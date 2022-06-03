@@ -14,7 +14,7 @@ class Game:
 
 		for row in range(0, 4):
 			for col in range(start_ind, end_ind + 1, 2):
-				self.board[row][col] = self.players[0]
+				self.board[row][col] = "R"
 			start_ind -= 1
 			end_ind += 1
 
@@ -44,7 +44,7 @@ class Game:
 		end_ind = 15
 		for row in range(13, 17):
 			for col in range(start_ind, end_ind + 1, 2):
-				self.board[row][col] = self.players[1]
+				self.board[row][col] = "B"
 			start_ind += 1
 			end_ind -= 1
 
