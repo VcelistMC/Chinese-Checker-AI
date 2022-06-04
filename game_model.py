@@ -206,23 +206,20 @@ class Game:
 	def eclidiean_distance(self, start, end):
 		num1 = pow(end[0] - start[0], 2)
 		num2 = pow(end[1] - start[1], 2) // 2
-		# print("num1: {0} num2: {1}".format(num1, num2))
 		return int(sqrt(num1 + num2)) 
 		
-	def manhattan_distance(self, start, end):
-		row_diff = abs(end[0] - start[0])
-		col_diff = abs(end[1] - start[1]) // 2
-
-		return row_diff + col_diff
+	def inGoalReigon(self, player, cell):
+		if player == self.AI:
+			return  cell[0] >= 12
+		else:
+			return cell[0] < 4
 
 	def printBoard(self):
 		for i in range(self.rows):
 			for j in range(self.cols):
 					print(self.getBall(i, j), end = " ")
 			print("\n")
-		# system("pause")
-		# system("cls")
-
+	
 	# executes a move, Note: This function assumes that the given next move is valid
 	def move(self, pieceRow, pieceCol, destRow, destCol):
 		self.board[destRow][destCol] = self.board[pieceRow][pieceCol]
@@ -347,6 +344,31 @@ class Game:
 
 		return count == 10
 
+	def printBoardScore(self):
+		for i in range(self.rows):
+			for j in range(self.cols):
+				if self.getBall(i, j) == " ":
+					print(" ", end = " ")
+				else:
+					print(self.manhattan_distance([i, j], [16, 12]), end=" ")
+			print("\n")
+
+	def getNonWinningPieces(self, player):
+		pieces = []
+		if player == self.AI:
+			for row in range(13):
+				for col in range(self.cols):
+					if self.getBall(row, col) == player:
+						pieces.append([row, col])
+		else:
+			for row in range(4, 17):
+				for col in range(self.cols):
+					if self.getBall(row, col) == player:
+						pieces.append([row, col])
+		
+		return pieces
+
+
 	def getPlayerBalls(self, player):
 		player_balls_position = []
 		for row in range(self.rows):
@@ -360,7 +382,3 @@ class Game:
 	def getBall(self, row, col):
 		return self.board[row][col]
 
-game = Game()
-
-game.printBoard()
-print(game.piecesInGoalReigon("B"))

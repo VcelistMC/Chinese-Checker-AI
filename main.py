@@ -8,4 +8,3 @@ if __name__ == "__main__":
     mainWin = GameView()
     mainWin.show()
     sys.exit( app.exec_() )
-    #comment

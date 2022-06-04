@@ -8,14 +8,10 @@ class GameManager:
         self.view = view
         self.AI = "R"
         self.Human = "B"
-        self.currentPlayer = self.Human
         self.MAX_SCORE = 9000
         self.currentlyHeldCell = None
         self.difficulty = diff
         self.holdingCell = False
-        self.ai_threshold_reached = False
-        self.human_threshold_reached = False
-        self.threshold = 10 // self.difficulty
 
     def move(self, cell):
         # we have to do extra shit here to validate the move and assert that the player
@@ -46,19 +42,10 @@ class GameManager:
         self.currentlyHeldCell, nextMove = self.getNextBestMove()
         self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], nextMove[0], nextMove[1])
         self.view.update()
-        print("moved " + str(self.currentlyHeldCell) + " to " + str(nextMove))
+        # print("moved " + str(self.currentlyHeldCell) + " to " + str(nextMove))
 
-        if not self.ai_threshold_reached or not self.human_threshold_reached:
-            self.check_threshold_satsifiacton()
-
-
-
-    def max_score(self, state1, state2):
-        return state1 if state1[1] > state2[1] else state2
-
-    def min_score(self, state1, state2):
-        return state1 if state1[1] < state2[1] else state2
-
+        if self.model.is_win(self.AI): self.view.declareWinner("AI")
+        elif self.model.is_win(self.Human): self.view.declareWinner("Player")
 
 
     def minimax(self, model, player, depth):
@@ -79,35 +66,21 @@ class GameManager:
 
         for playerBall in playerBalls:
             validMoves_for_balls = self.model.getAllValidMoves(playerBall[0], playerBall[1])
-
             for validMove in validMoves_for_balls:
                 if player == self.Human:
                     score = -self.MAX_SCORE
-                    
+
                     model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
-                    # print("Human moved " + str(playerBall) +" to " + str(validMove) )
-                    # self.model.printBoard()
-                    
                     score = max(score, self.minimax(model, self.AI, depth - 1))
                     model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
-                    
-                    # print("Human unmoved " + str(validMove) +" to " + str(playerBall))
-                    # self.model.printBoard()
-
                     return score
 
                 else:
                     score = self.MAX_SCORE
 
-                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
-                    # print("Ai moved " + str(playerBall) + " to " + str(validMove))
-                    # self.model.printBoard()
-
+                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1]) 
                     score = min(score, self.minimax(model, self.Human, depth - 1))
                     model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
-
-                    # print("AI unmoved " + str(validMove) + " to " + str(playerBall))
-                    # self.model.printBoard()
                     return score
 
 
@@ -115,6 +88,7 @@ class GameManager:
         nextMove = None
         piece_to_move = None
         bestScore = self.MAX_SCORE
+
         aiPieces = self.model.getPlayerBalls(self.AI)
 
         for piece in aiPieces:
@@ -125,19 +99,20 @@ class GameManager:
                 score = self.minimax(self.model, self.Human, self.difficulty)
                 self.model.move(validMove[0], validMove[1], piece[0], piece[1])
 
-                # print("moving " + str(piece) + " to " + str(validMove) + " will result in " + str(score))
-                if score < bestScore:
+
+                if score <= bestScore:
                     nextMove = validMove
                     bestScore = score
                     piece_to_move = piece
         
+
         return piece_to_move, nextMove
 
     def eclidiean_distance(self, start, end):
         num1 = pow(end[0] - start[0], 2)
         num2 = pow(end[1] - start[1], 2) // 2
         # print("num1: {0} num2: {1}".format(num1, num2))
-        return int(sqrt(num1 + num2))
+        return sqrt(num1 + num2)
 
     def manhattan_distance(self, start, end):
         row_diff = abs(end[0] - start[0])
@@ -145,62 +120,13 @@ class GameManager:
 
         return row_diff + col_diff
 
-    def check_threshold_satsifiacton(self):
-        self.ai_threshold_reached = (self.model.piecesInGoalReigon(self.AI) >= self.threshold)
-        self.human_threshold_reached = (self.model.piecesInGoalReigon(self.Human) >= self.threshold)
-
-        print("AI thresh: {}".format(self.model.piecesInGoalReigon(self.AI)))
-        print("Human thresh: {}".format(self.model.piecesInGoalReigon(self.Human)))
-        print("thresh: {}".format(self.threshold))
 
     def evalBoard(self, player):
-        # # print(balls)
-        goal = [0,12] if player == self.Human else [16,12]
-        start = 12
-        end = 12
-
-        if self.ai_threshold_reached and player == self.AI:
-            found = False
-            for row in range(16, 12, -1):
-                for col in range(start, end+1):
-                    if self.model.getBall(row, col) == ".":
-                        goal = [row, col]
-                        found = True
-                        break
-                start -= 1
-                end += 1
-                if found:
-                    break
-
-        if self.human_threshold_reached and player == self.Human:
-            found = False
-            for row in range(0, 4):
-                for col in range(start, end+1):
-                    if self.model.getBall(row, col) == ".":
-                        goal = [row, col]
-                        found = True
-                        break
-                start -= 1
-                end += 1
-                if found:
-                    break
-
-        print("goal for {} is {}".format(player, str(goal)))
+        goal = [0,12] if player == self.Human else [16,12]        
         distance = 0
-
         balls = self.model.getPlayerBalls(player)
         for ball in balls:
             distance +=  self.eclidiean_distance(ball, goal)
 
         return distance
 
-
-# game = Game()
-# gamemanage = GameManager(game, None, 3)
-# # print(gamemanage.evalBoard(gamemanage.AI))
-# # game.move(2, 12, 6, 8)
-# game.printBoard()
-# # print(gamemanage.evalBoard(gamemanage.Human))
-# # print(gamemanage.evalBoard(gamemanage.AI))
-# # print(game.getAllValidMoves(2, 12))
-# print(gamemanage.getNextBestMove())

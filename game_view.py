@@ -1,6 +1,7 @@
+from os import system
 import sys
 from PyQt5 import QtCore, QtWidgets
-from PyQt5.QtWidgets import QMainWindow
+from PyQt5.QtWidgets import QMainWindow, QMessageBox
 from PyQt5.QtWidgets import QPushButton
 from PyQt5.QtCore import QSize
 from PyQt5.QtGui import QRegion
@@ -33,7 +34,7 @@ class GameView(QMainWindow):
         QMainWindow.__init__(self)
         
         self.model = Game()
-        self.controller = GameManager(self.model, self, 5)
+        self.controller = GameManager(self.model, self)
         self.buttons = {}
         self.setMinimumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
         self.setMaximumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
@@ -58,6 +59,16 @@ class GameView(QMainWindow):
         ind = self.sender().ind
         self.controller.move(ind)
     
+    def declareWinner(self, winner):
+        dlg = QMessageBox(self)
+        dlg.setStyleSheet("background: white")
+        dlg.setWindowTitle("We have a winner!")
+        dlg.setText("{} won".format(winner))
+        button = dlg.exec()
+
+        if button == QMessageBox.Ok:
+            sys.exit()
+
     # re-render the board
     def update(self):
         currInd = 0
