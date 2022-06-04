@@ -52,8 +52,8 @@ class Game:
 		self.board = [[" " for _ in range(self.cols)] for _ in range(self.rows)]
 		self.board[0][12] = "R"
 		self.board[1][11] = "R"
-		self.board[1][13] = "R"
-		self.board[2][10] = "R"
+		self.board[1][13] = "B"
+		self.board[2][10] = "B"
 		self.board[2][12] = "R"
 		self.board[2][14] = "R"
 		self.board[3][9] = "R"
@@ -105,8 +105,8 @@ class Game:
 		self.board[6][22] = "."
 		self.board[7][21] = "."
 
-		self.board[16][12] = "B"
-		self.board[15][11] = "B"
+		self.board[16][12] = "R"
+		self.board[15][11] = "R"
 		self.board[15][13] = "B"
 		self.board[14][10] = "B"
 		self.board[14][12] = "B"
@@ -198,6 +198,8 @@ class Game:
 		self.directions.setdefault("west", [0, -2])
 		self.directions.setdefault("south west", [1, -1])
 		self.directions.setdefault("south east", [1, 1])
+		self.AI = "R"
+		self.Human = "B"
 
 		self.initBoard()
 		
@@ -216,10 +218,7 @@ class Game:
 	def printBoard(self):
 		for i in range(self.rows):
 			for j in range(self.cols):
-				if self.getBall(i, j) == " ":
-					print(" ", end = " ")
-				else:
-					print(self.manhattan_distance([i, j], [16, 12]), end=" ")
+					print(self.getBall(i, j), end = " ")
 			print("\n")
 		# system("pause")
 		# system("cls")
@@ -299,29 +298,33 @@ class Game:
 				currValidMoves = self.getValidMoveRecu(jumpRow, jumpCol, currValidMoves, True)
 		return currValidMoves
 
-
-	# def getAllValidMoves(self, pieceRow, pieceCol) -> list:
-	# 	allMoves = self.getMoves(pieceRow, pieceCol)
-	# 	validMoves = []
-	# 	for dir, move in allMoves.items():
-	# 		row = move[0]
-	# 		col = move[1]
-	# 		if self.board[row][col] == ".":
-	# 			validMoves.append(move)
-	# 			continue
-
-	# 		dirMove = self.directions[dir]
-	# 		newRow = row + dirMove[0]
-	# 		newCol = col + dirMove[1]
-
-	# 		if self.board[newRow][newCol] == ".":
-	# 			validMoves.append([newRow, newCol])
-
-	# 	return validMoves
+	def piecesInGoalReigon(self, player):
+		countInGoal = 0
+		if player == self.AI:
+			start = 9
+			end = 15
+			for row in range(13, 17):
+				for col in range(start, end+1, 2):
+					if self.getBall(row, col) == player:
+						countInGoal += 1
+				start += 1
+				end -= 1
+			
+		else:
+			start = 12
+			end = 12
+			for row in range(4):
+				for col in range(start, end+1, 2):
+					if self.getBall(row, col) == player:
+						countInGoal += 1
+				start -= 1
+				end += 1
+		
+		return countInGoal
 
 	def is_win(self, player):
 		count = 0
-		if player == "B":
+		if player == self.Human:
 			start_index = 12
 			end_index = 12
 			for row in range(4):
@@ -359,10 +362,5 @@ class Game:
 
 game = Game()
 
-# # # # # print(moves)
-# # # game.printBoard()
-# # # print(game.is_win("."))
-# # # game.board
-# # print(game.g2(2, 12))
 game.printBoard()
-# # # # print(game.is_win("."))
+print(game.piecesInGoalReigon("B"))

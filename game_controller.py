@@ -13,6 +13,9 @@ class GameManager:
         self.currentlyHeldCell = None
         self.difficulty = diff
         self.holdingCell = False
+        self.ai_threshold_reached = False
+        self.human_threshold_reached = False
+        self.threshold = 10 // self.difficulty
 
     def move(self, cell):
         # we have to do extra shit here to validate the move and assert that the player
@@ -44,6 +47,10 @@ class GameManager:
         self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], nextMove[0], nextMove[1])
         self.view.update()
         print("moved " + str(self.currentlyHeldCell) + " to " + str(nextMove))
+
+        if not self.ai_threshold_reached or not self.human_threshold_reached:
+            self.check_threshold_satsifiacton()
+
 
 
     def max_score(self, state1, state2):
@@ -138,37 +145,47 @@ class GameManager:
 
         return row_diff + col_diff
 
+    def check_threshold_satsifiacton(self):
+        self.ai_threshold_reached = (self.model.piecesInGoalReigon(self.AI) >= self.threshold)
+        self.human_threshold_reached = (self.model.piecesInGoalReigon(self.Human) >= self.threshold)
+
+        print("AI thresh: {}".format(self.model.piecesInGoalReigon(self.AI)))
+        print("Human thresh: {}".format(self.model.piecesInGoalReigon(self.Human)))
+        print("thresh: {}".format(self.threshold))
+
     def evalBoard(self, player):
         # # print(balls)
         goal = [0,12] if player == self.Human else [16,12]
-        # start = 12
-        # end = 12
-        # found = False
-        # if player == self.AI:
-        #     for row in range(16, 12, -1):
-        #         for col in range(start, end+1):
-        #             if self.model.getBall(row, col) == ".":
-        #                 goal = [row, col]
-        #                 found = True
-        #                 break
-        #         start -= 1
-        #         end += 1
-        #         if found:
-        #             break
-            
-        # else:
-        #     for row in range(0, 4):
-        #         for col in range(start, end+1):
-        #             if self.model.getBall(row, col) == ".":
-        #                 goal = [row, col]
-        #                 found = True
-        #                 break
-        #         start -= 1
-        #         end += 1
-        #         if found:
-        #             break
+        start = 12
+        end = 12
 
-        # print("goal for {} is {}".format(player, str(goal)))
+        if self.ai_threshold_reached and player == self.AI:
+            found = False
+            for row in range(16, 12, -1):
+                for col in range(start, end+1):
+                    if self.model.getBall(row, col) == ".":
+                        goal = [row, col]
+                        found = True
+                        break
+                start -= 1
+                end += 1
+                if found:
+                    break
+
+        if self.human_threshold_reached and player == self.Human:
+            found = False
+            for row in range(0, 4):
+                for col in range(start, end+1):
+                    if self.model.getBall(row, col) == ".":
+                        goal = [row, col]
+                        found = True
+                        break
+                start -= 1
+                end += 1
+                if found:
+                    break
+
+        print("goal for {} is {}".format(player, str(goal)))
         distance = 0
 
         balls = self.model.getPlayerBalls(player)
