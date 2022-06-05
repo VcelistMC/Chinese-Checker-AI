@@ -124,7 +124,7 @@ class GameManager:
 
         return piece_to_move, nextMove
 
-    def eclidiean_distance(self, start, end):
+    def euclidean_distance(self, start, end):
         num1 = pow(end[0] - start[0], 2)
         num2 = pow(end[1] - start[1], 2) // 2
         return int(sqrt(num1 + num2))
@@ -142,7 +142,7 @@ class GameManager:
         distance = 0
         balls = model.getPlayerBalls(player)
         for ball in balls:
-            distance +=  self.eclidiean_distance(ball, goal)
+            distance +=  self.euclidean_distance(ball, goal)
 
         return distance
 
