@@ -2,9 +2,9 @@ from os import system
 import sys
 from PyQt5 import QtCore, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QMessageBox
-from PyQt5.QtWidgets import QPushButton
+from PyQt5.QtWidgets import QPushButton, QLabel
 from PyQt5.QtCore import QSize
-from PyQt5.QtGui import QRegion
+from PyQt5.QtGui import QRegion, QFont
 from game_model import Game
 
 from game_controller import GameManager
@@ -29,16 +29,33 @@ class Cell(QPushButton):
         self.setStyleSheet(button_style.format(color))
         
 
+
+
 class GameView(QMainWindow):
-    def __init__(self):
+
+    def changeTurn(self, player):
+        if player == "AI":
+            self.turnLbl.setText("AI's Turn")
+            self.turnLbl.setStyleSheet("color: red")
+        else:
+            self.turnLbl.setText("Your Turn")
+            self.turnLbl.setStyleSheet("color: blue")
+
+    def __init__(self, diff):
         QMainWindow.__init__(self)
         
         self.model = Game()
-        self.controller = GameManager(self.model, self)
+        self.controller = GameManager(self.model, self, diff)
         self.buttons = {}
-        self.setMinimumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
-        self.setMaximumSize(QSize(self.model.cols * Cell.size, self.model.rows * Cell.size))
+        self.setMinimumSize(QSize(self.model.cols * Cell.size, (self.model.rows + 3) * Cell.size))
+        self.setMaximumSize(QSize(self.model.cols * Cell.size, (self.model.rows + 3) * Cell.size))
         self.setStyleSheet("background: black")
+        self.turnLbl = QLabel(self)
+        self.turnLbl.move(0, 40 * 17)
+        self.turnLbl.setGeometry(0, 40*17, 200, 200)
+        self.turnLbl.setText("Your Turn")
+        self.turnLbl.setFont(QFont("Ariel", 20))
+        self.turnLbl.setStyleSheet("color: blue")
         
         for row in range(self.model.rows):
             for col in range(self.model.cols):
@@ -87,10 +104,3 @@ class GameView(QMainWindow):
     def setValidMoves(self, moves):
         for move in moves:
             self.buttons[tuple(move)].setColor("orange")
-
-
-if __name__ == "__main__":
-    app = QtWidgets.QApplication(sys.argv)
-    mainWin = GameView()
-    mainWin.show()
-    sys.exit( app.exec_() )

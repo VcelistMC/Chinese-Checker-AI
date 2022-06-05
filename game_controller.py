@@ -14,9 +14,6 @@ class GameManager:
         self.holdingCell = False
 
     def move(self, cell):
-        # we have to do extra shit here to validate the move and assert that the player
-        # is holding the valid balls and stuff and switch turns
-        # tommorrow tommorow 
         ball = self.model.getBall(cell[0], cell[1])
         if (ball == "." and not self.holdingCell) or ball == self.AI: return
         
@@ -33,61 +30,80 @@ class GameManager:
             self.view.setValidMoves(self.model.getAllValidMoves(cell[0], cell[1]))
             return 
         else:
-            # if tuple(cell) not in self.model.getAllValidMoves(self.currentlyHeldCell[0], self.currentlyHeldCell[1]):
-            #     return
+            if tuple(cell) not in self.model.getAllValidMoves(self.currentlyHeldCell[0], self.currentlyHeldCell[1]):
+                return
             self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], cell[0], cell[1])
+            self.view.changeTurn("AI")
             self.view.update()
             self.holdingCell = False
+
+            
+            if self.model.is_win(self.Human):
+                self.view.declareWinner("Player")
+                return        
         
         self.currentlyHeldCell, nextMove = self.getNextBestMove()
         self.model.move(self.currentlyHeldCell[0], self.currentlyHeldCell[1], nextMove[0], nextMove[1])
         self.view.update()
-        # print("moved " + str(self.currentlyHeldCell) + " to " + str(nextMove))
+        if self.model.is_win(self.AI): 
+            self.view.declareWinner("AI")
+        self.view.changeTurn("Human")
 
-        if self.model.is_win(self.AI): self.view.declareWinner("AI")
-        elif self.model.is_win(self.Human): self.view.declareWinner("Player")
 
-
-    def minimax(self, model, player, depth):
+    def minimax(self, model, player, depth, alpha, beta):
         
-        playerWon = self.model.is_win(player)
+        playerWon = model.is_win(player)
         if playerWon:
             if player == self.AI:
                 print("AI won")
-                return -self.MAX_SCORE
+                return self.MAX_SCORE
             else: 
                 print("Human won")
-                return self.MAX_SCORE
+                return -self.MAX_SCORE
 
         elif depth == 0:
-            return self.evalBoard(self.AI) - self.evalBoard(self.Human)
+            return self.evalBoard(model, self.Human) - self.evalBoard(model, self.AI)
 
-        playerBalls = self.model.getPlayerBalls(player)
 
-        for playerBall in playerBalls:
-            validMoves_for_balls = self.model.getAllValidMoves(playerBall[0], playerBall[1])
-            for validMove in validMoves_for_balls:
-                if player == self.Human:
-                    score = -self.MAX_SCORE
+        if player == self.AI:
+            score = -self.MAX_SCORE
 
-                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1])
-                    score = max(score, self.minimax(model, self.AI, depth - 1))
-                    model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
-                    return score
+            ai_pieces = model.getPlayerBalls(self.AI)
+            for piece in ai_pieces:
+                validMoves = model.getAllValidMoves(piece[0], piece[1])
 
-                else:
-                    score = self.MAX_SCORE
+                for validMove in validMoves:
+                    model.move(piece[0], piece[1], validMove[0], validMove[1]) 
+                    score = max(score, self.minimax(model, self.Human, depth - 1, alpha, beta))
+                    model.move(validMove[0], validMove[1], piece[0], piece[1])
 
-                    model.move(playerBall[0], playerBall[1], validMove[0], validMove[1]) 
-                    score = min(score, self.minimax(model, self.Human, depth - 1))
-                    model.move(validMove[0], validMove[1], playerBall[0], playerBall[1])
-                    return score
+                    alpha = max(alpha, score)
+                    if beta <= alpha:
+                        return score
+                    
+            return score
+        else:
+            score = self.MAX_SCORE
+            human_pcs = model.getPlayerBalls(self.Human)
+            for piece in human_pcs:
+                validMoves = model.getAllValidMoves(piece[0], piece[1])
+                
+                for validMove in validMoves:
+                    model.move(piece[0], piece[1], validMove[0], validMove[1])
+                    score = min(score, self.minimax(model, self.AI, depth - 1, alpha, beta))
+                    model.move(validMove[0], validMove[1], piece[0], piece[1])
+
+                    beta = min(beta, score)
+                    if beta <= alpha:
+                        return score
+            return score
+
 
 
     def getNextBestMove(self):
         nextMove = None
         piece_to_move = None
-        bestScore = self.MAX_SCORE
+        bestScore = -self.MAX_SCORE
 
         aiPieces = self.model.getPlayerBalls(self.AI)
 
@@ -96,11 +112,11 @@ class GameManager:
             for validMove in validMoves:
                 
                 self.model.move(piece[0], piece[1], validMove[0], validMove[1])
-                score = self.minimax(self.model, self.Human, self.difficulty)
+                score = self.minimax(self.model, self.Human, self.difficulty, -self.MAX_SCORE, self.MAX_SCORE)
                 self.model.move(validMove[0], validMove[1], piece[0], piece[1])
 
 
-                if score <= bestScore:
+                if score > bestScore:
                     nextMove = validMove
                     bestScore = score
                     piece_to_move = piece
@@ -111,8 +127,7 @@ class GameManager:
     def eclidiean_distance(self, start, end):
         num1 = pow(end[0] - start[0], 2)
         num2 = pow(end[1] - start[1], 2) // 2
-        # print("num1: {0} num2: {1}".format(num1, num2))
-        return sqrt(num1 + num2)
+        return int(sqrt(num1 + num2))
 
     def manhattan_distance(self, start, end):
         row_diff = abs(end[0] - start[0])
@@ -121,10 +136,11 @@ class GameManager:
         return row_diff + col_diff
 
 
-    def evalBoard(self, player):
-        goal = [0,12] if player == self.Human else [16,12]        
+    def evalBoard(self, model, player):
+        goal = [0,12] if player == self.Human else [16,12]
+        
         distance = 0
-        balls = self.model.getPlayerBalls(player)
+        balls = model.getPlayerBalls(player)
         for ball in balls:
             distance +=  self.eclidiean_distance(ball, goal)
 

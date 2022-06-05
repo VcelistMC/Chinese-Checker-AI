@@ -6,9 +6,7 @@ from game_controller import GameManager
 
 if __name__ == "__main__":
     app = QtWidgets.QApplication(sys.argv)
-    mainWin = GameView()
     diff = int(input("Enter Difficulty Level: (1:- Easy, 3:- Medium, 5: Hard) (any number in between should also work) "))
-    game_controller = GameManager(mainWin.model, mainWin, diff)
-    print(mainWin.controller.difficulty)
+    mainWin = GameView(diff)
     mainWin.show()
     sys.exit(app.exec_())
