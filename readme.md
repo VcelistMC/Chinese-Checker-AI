@@ -24,6 +24,6 @@ python main.py [difficulty]
 ```
 
 ## ScreenShots
-![Game Start](Screenshots/gameStart.png)
-![mid game](Screenshots/midGame.png)
-![Ai winning](Screenshots/aiWin.png)
+![Game Start](ScreenShots/gameStart.png)
+![mid game](ScreenShots/midGame.png)
+![Ai winning](ScreenShots/aiWin.png)
