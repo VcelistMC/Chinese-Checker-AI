@@ -13,7 +13,17 @@ def euclidean_distance(self, start, end):   
     return sqrt(num1 + num2)
 ```
 The AI decides based on the difference between its board score and the human board score, so naturally, a negative score indicates that the player is closer to the goal than the AI and vice versa
-## Screenshots
-![Game Start](ScreenShots/gameStart.png)
-![mid game](ScreenShots/midGame.png)
-![Ai winning](ScreenShots/aiWin.png)
+## How to run this gmae
+1. First install the project requirements
+```
+pip install requirements.txt
+```
+2. simply run the `main.py` file with the difficulty of choice (1 for easy, 3 for medium and 5 for hard)
+```
+python main.py [difficulty]
+```
+
+## ScreenShots
+![Game Start](Screenshots/gameStart.png)
+![mid game](Screenshots/midGame.png)
+![Ai winning](Screenshots/aiWin.png)
